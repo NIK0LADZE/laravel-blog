@@ -1,0 +1,15 @@
+body {
+    margin: auto;
+    max-width: 600px;
+    font-family: sans-serif;
+}
+
+article:not(:first-child) {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid gray;
+}
+
+p {
+    line-height: 1.6;
+}
