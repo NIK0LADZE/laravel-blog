@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Post;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,19 +17,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $posts = Post::all();
-
-    // ddd($posts);
-
-    return view('posts', ['posts' => $posts]);
+    return view('posts', [
+        'posts' => Post::latest('published_at')->get()
+    ]);
 });
 
-Route::get('posts/{post}', function ($slug) {
-    $post = Post::findOrFail($slug);
+Route::get('posts/{slug}', function ($slug) {
+    $post = cache()->get("p_{$slug}");
 
-    // ddd($post);
+    if (!$post) {
+        $post = Post::where('slug', $slug)->firstOrFail();
+        cache()->remember("p_{$slug}", 5, fn () => $post);
+    }
 
     return view('post', [
         'post' => $post
+    ]);
+});
+
+Route::get('/categories/{category:slug}', function (Category $category) {
+    return view('posts', [
+        'posts' => $category->posts->sortByDesc('published_at')
+    ]);
+});
+
+Route::get('/authors/{author:username}', function (User $author) {
+    return view('posts', [
+        'posts' => $author->posts->sortByDesc('published_at')
     ]);
 });
