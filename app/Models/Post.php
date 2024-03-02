@@ -9,6 +9,15 @@ class Post extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'published_at' => 'datetime'
+    ];
+
     protected $with = ['category', 'author'];
 
     public function category()
