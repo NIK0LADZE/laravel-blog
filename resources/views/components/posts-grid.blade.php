@@ -1,5 +1,5 @@
 @props(['posts'])
-<x-post-main-card :post="$posts[0]" />
+<x-post-main-card :post="$posts->first()" />
 
 @if ($posts->count() > 1)
     <div class="lg:grid lg:grid-cols-6">

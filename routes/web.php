@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
@@ -16,31 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('posts', [
-        'posts' => Post::latest('published_at')->get(),
-        'categories' => Category::all()
-    ]);
-})->name('home');
-
-Route::get('posts/{slug}', function ($slug) {
-    $post = Post::where('slug', $slug)->firstOrFail();
-    cache()->remember("p_$slug", 5, fn() => $post);
-
-    return view('post', compact('post'));
-});
-
-Route::get('/categories/{category:slug}', function (Category $category) {
-    return view('posts', [
-        'posts' => $category->posts->sortByDesc('published_at'),
-        'currentCategory' => $category,
-        'categories' => Category::all()
-    ]);
-});
-
-Route::get('/authors/{author:username}', function (User $author) {
-    return view('posts', [
-        'posts' => $author->posts->sortByDesc('published_at'),
-        'categories' => Category::all()
-    ]);
+Route::controller(PostController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::get('posts/{slug}', 'showOne');
+    Route::get('/categories/{category:slug}', 'showCategoryPosts');
+    Route::get('/authors/{author:username}', 'showAuthorPosts');
 });
