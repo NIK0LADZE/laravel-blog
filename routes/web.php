@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('posts/{slug}', 'showOne');
-    Route::get('/categories/{category:slug}', 'showCategoryPosts');
-    Route::get('/authors/{author:username}', 'showAuthorPosts');
+    Route::get('posts/{slug}', 'show');
+    Route::get('/categories/{category:slug}', 'categoryPosts')->name('categories');
+    Route::get('/authors/{author:username}', 'authorPosts');
 });
