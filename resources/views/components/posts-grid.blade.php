@@ -1,4 +1,5 @@
 @props(['posts'])
+
 <x-post-main-card :post="$posts->first()" />
 
 @if ($posts->count() > 1)
