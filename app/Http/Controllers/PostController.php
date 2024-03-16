@@ -9,22 +9,10 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    protected Request $request;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    public function index()
+    public function index(Request $request)
     {
         return view('posts.index', [
-            'posts' => Post::latest('published_at')->filter($this->request)->paginate(6)->withQueryString(),
+            'posts' => Post::latest('published_at')->filter($request)->paginate(6)->withQueryString(),
         ]);
     }
 
@@ -35,17 +23,17 @@ class PostController extends Controller
         return view('posts.show', compact('post'));
     }
 
-    public function categoryPosts(Category $category)
+    public function categoryPosts(Category $category, Request $request)
     {
         return view('posts.index', [
-            'posts' => $category->posts()->latest('published_at')->filter($this->request)->paginate(6)->withQueryString(),
+            'posts' => $category->posts()->latest('published_at')->filter($request)->paginate(6)->withQueryString(),
         ]);
     }
 
-    public function authorPosts(User $author)
+    public function authorPosts(User $author, Request $request)
     {
         return view('posts.index', [
-            'posts' => $author->posts()->latest('published_at')->filter($this->request)->paginate(6)->withQueryString(),
+            'posts' => $author->posts()->latest('published_at')->filter($request)->paginate(6)->withQueryString(),
         ]);
     }
 }

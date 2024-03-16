@@ -19,7 +19,7 @@
                     </div>
 
                     @if ($comment->author->id === request()->user()?->id)
-                        <form action="{{ route('post', $post->slug) }}/comments" method="POST">
+                        <form action="{{ route('comments', $post->slug) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <input type="text" name="comment_id" value="{{ $comment->id }}" hidden>
@@ -30,7 +30,7 @@
             </header>
 
             <p>
-                {{ $comment->body }}
+                {!! nl2br($comment->body) !!}
             </p>
         </div>
     </article>

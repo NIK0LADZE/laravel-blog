@@ -1,6 +1,6 @@
 @auth
     <x-card>
-        <form method="POST" action="/posts/{{ $post->slug }}/comments">
+        <form method="POST" action="{{ route('comments', $post->slug) }}">
             @csrf
 
             <header class="flex items-center">
@@ -27,7 +27,7 @@
             </div>
 
             <div class="flex justify-end mt-6 pt-6 border-t border-gray-200">
-                <x-button>Post</x-button>
+                <x-button type="primary">Post</x-button>
             </div>
         </form>
     </x-card>

@@ -19,7 +19,7 @@ class Post extends Model
         'published_at' => 'datetime'
     ];
 
-    protected $with = ['category', 'author'];
+    protected $with = ['category', 'author', 'comments'];
 
     public function scopeFilter($query, Request $request)
     {

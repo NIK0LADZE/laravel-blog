@@ -24,18 +24,18 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/authors/{author:username}', 'authorPosts');
 });
 
-Route::controller(UserController::class)->group(function () {
-    Route::get('/register','create')->middleware('guest');
-    Route::post('/register','store')->middleware('guest');
+Route::controller(UserController::class)->middleware('guest')->name('register')->group(function () {
+    Route::get('/register','create');
+    Route::post('/register','store');
 });
 
 Route::controller(SessionsController::class)->group(function () {
-    Route::get('/login','create')->middleware('guest');
+    Route::get('/login','create')->middleware('guest')->name('login');
     Route::post('/login','store')->middleware('guest');
-    Route::post('/logout','destroy')->middleware('auth');
+    Route::post('/logout','destroy')->middleware('auth')->name('logout');
 });
 
-Route::controller(CommentController::class)->group(function () {
-    Route::post('/posts/{post:slug}/comments','store')->middleware('auth');
-    Route::delete('/posts/{post:slug}/comments','destroy')->middleware('auth');
+Route::controller(CommentController::class)->middleware('auth')->name('comments')->group(function () {
+    Route::post('/posts/{post:slug}/comments','store');
+    Route::delete('/posts/{post:slug}/comments','destroy');
 });
