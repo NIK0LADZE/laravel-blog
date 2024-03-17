@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     /**
      * The attributes that should be mutated to dates.
@@ -19,17 +21,37 @@ class Post extends Model
         'published_at' => 'datetime'
     ];
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'slug',
+        'excerpt',
+        'body',
+        'user_id',
+        'category_id',
+        'published_at',
+    ];
+
     protected $with = ['category', 'author', 'comments'];
 
-    public function scopeFilter($query, Request $request)
+    public function scopeSearch($query, $searchString, $titleOnly = false)
     {
         $query->when(
-            $request->query('search'),
-            fn ($query, $search) => $query
-                ->where(fn ($query) =>
-                    $query->where('title', 'like', "%$search%")
-                        ->orWhere("excerpt", "like", "%$search%")
-                        ->orWhere("body", "like", "%$search%"))
+            $searchString,
+            fn ($query, $searchString) => $query
+                ->when(
+                    $titleOnly,
+                    fn ($query) => $query->where('title', 'like', "%$searchString%"),
+                    fn ($query) => $query
+                            ->where(fn ($query) =>
+                            $query->where('title', 'like', "%$searchString%")
+                                ->orWhere("excerpt", "like", "%$searchString%")
+                                ->orWhere("body", "like", "%$searchString%"))
+                )
         );
     }
 

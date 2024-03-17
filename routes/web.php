@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminPostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SessionsController;
@@ -17,11 +18,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(AdminPostController::class)->middleware('admin')->group(function () {
+    Route::get('/admin/posts', 'index')->name('admin.posts.index');
+    Route::get('/admin/posts/create', 'create')->name('admin.posts.create');
+    Route::post('/admin/posts/create', 'store')->name('admin.posts.store');
+    Route::get('/admin/posts/{post}/edit', 'edit')->name('admin.posts.edit');
+    Route::patch('/admin/posts/{post}', 'update')->name('admin.posts.update');
+    Route::delete('/admin/posts/{post}','destroy')->name('admin.posts.destroy');
+});
+
 Route::controller(PostController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('posts/{slug}', 'show')->name('post');
-    Route::get('/categories/{category:slug}', 'categoryPosts')->name('categories');
-    Route::get('/authors/{author:username}', 'authorPosts');
+    Route::get('/posts/{slug}', 'show')->name('post');
+    Route::get('/categories/{category:slug}', 'categoryPosts')->name('category.posts');
+    Route::get('/authors/{author:username}', 'authorPosts')->name('author.posts');
 });
 
 Route::controller(UserController::class)->middleware('guest')->name('register')->group(function () {
@@ -31,11 +41,11 @@ Route::controller(UserController::class)->middleware('guest')->name('register')-
 
 Route::controller(SessionsController::class)->group(function () {
     Route::get('/login','create')->middleware('guest')->name('login');
-    Route::post('/login','store')->middleware('guest');
+    Route::post('/login','store')->middleware('guest')->name('login');
     Route::post('/logout','destroy')->middleware('auth')->name('logout');
 });
 
-Route::controller(CommentController::class)->middleware('auth')->name('comments')->group(function () {
-    Route::post('/posts/{post:slug}/comments','store');
-    Route::delete('/posts/{post:slug}/comments','destroy');
+Route::controller(CommentController::class)->middleware('auth')->group(function () {
+    Route::post('/posts/{post:slug}/comments','store')->name('comments.store');
+    Route::delete('/posts/{post:slug}/comments','destroy')->name('comments.destroy');
 });

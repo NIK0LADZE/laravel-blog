@@ -12,7 +12,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         return view('posts.index', [
-            'posts' => Post::latest('published_at')->filter($request)->paginate(6)->withQueryString(),
+            'posts' => Post::latest('published_at')->search($request->query('search'))->paginate(6)->withQueryString(),
         ]);
     }
 
@@ -26,14 +26,14 @@ class PostController extends Controller
     public function categoryPosts(Category $category, Request $request)
     {
         return view('posts.index', [
-            'posts' => $category->posts()->latest('published_at')->filter($request)->paginate(6)->withQueryString(),
+            'posts' => $category->posts()->latest('published_at')->search($request->query('search'))->paginate(6)->withQueryString(),
         ]);
     }
 
     public function authorPosts(User $author, Request $request)
     {
         return view('posts.index', [
-            'posts' => $author->posts()->latest('published_at')->filter($request)->paginate(6)->withQueryString(),
+            'posts' => $author->posts()->latest('published_at')->search($request->query('search'))->paginate(6)->withQueryString(),
         ]);
     }
 }

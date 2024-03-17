@@ -19,11 +19,11 @@
                     </div>
 
                     @if ($comment->author->id === request()->user()?->id)
-                        <form action="{{ route('comments', $post->slug) }}" method="POST">
+                        <form action="{{ route('comments.destroy', $post->slug) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <input type="text" name="comment_id" value="{{ $comment->id }}" hidden>
-                            <x-button type="danger">Delete</x-button>
+                            <x-form.button type="danger">Delete</x-form.button>
                         </form>
                     @endif
                 </div>

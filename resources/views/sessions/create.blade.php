@@ -6,14 +6,10 @@
             <form method="POST" action="{{ route('login') }}" class="mt-10">
                 @csrf
 
-                <x-field label="Email" name="email" type="email" :required="true" :old="true" />
-                <x-field label="Password" name="password" type="password" :required="true" />
+                <x-form.input label="Email" name="email" type="email" required />
+                <x-form.input label="Password" name="password" type="password" required />
 
-                <div>
-                    <button type="submit" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500">
-                        Log In
-                    </button>
-                </div>
+                <x-form.button type="primary" class="mt-6 text-md font-normal normal-case rounded py-2 px-4">Log In</x-form.button>
             </form>
         </main>
     </section>

@@ -7,11 +7,11 @@
         </button>
     </x-slot>
 
-    <x-dropdown-item href="/" :active="request()->routeIs('home')">All</x-dropdown-item>
+    <x-dropdown-item href="{{ route('home') }}" :active="request()->routeIs('home')">All</x-dropdown-item>
 
     @foreach ($categories as $category)
         <x-dropdown-item
-            href="{{ route('categories', $category->slug) }}"
+            href="{{ route('category.posts', $category->slug) }}"
             :active="$currentCategory === $category->name"
         >{{ ucwords($category->name) }}</x-dropdown-item>
     @endforeach

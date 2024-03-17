@@ -17,23 +17,30 @@
     <section class="px-6 py-8">
         <nav class="md:flex md:justify-between md:items-center">
             <div>
-                <a href="/">
+                <a href="{{ route('home') }}">
                     <img src="/images/logo.svg" alt="Laracasts Logo" width="165" height="16">
                 </a>
             </div>
 
             <div class="mt-8 md:mt-0 flex items-center">
                 @auth
-                    <span class="text-xs font-bold uppercase">Welcome, {{ auth()->user()->name }}!</span>
+                    <x-dropdown>
+                        <x-slot name="trigger">
+                            <button class="text-xs font-bold uppercase">Welcome, {{ auth()->user()->name }}!</button>
+                        </x-slot>
+                        @can('admin')
+                            <x-dropdown-item href="{{ route('admin.posts.index') }}" :active="request()->routeIs('admin.posts.index')">All Posts</x-dropdown-item>
+                            <x-dropdown-item href="{{ route('admin.posts.create') }}" :active="request()->routeIs('admin.posts.create')">New Post</x-dropdown-item>
+                        @endcan
+                        <x-dropdown-item href="#" x-data="{}" @click.prevent="$refs.logoutForm.submit()">Log Out</x-dropdown-item>
 
-                    <form method="POST" action="{{ route('logout') }}" class="text-xs font-semibold text-blue-500 ml-6">
-                        @csrf
-
-                        <button type="submit">Log Out</button>
-                    </form>
+                        <form x-ref="logoutForm" method="POST" action="{{ route('logout') }}" class="hidden">
+                            @csrf
+                        </form>
+                    </x-dropdown>
                 @else
-                    <a href="/register" class="text-xs font-bold uppercase">Register</a>
-                    <a href="/login" class="ml-6 text-xs font-bold uppercase">Log In</a>
+                    <a href="{{ route('register') }}" class="text-xs font-bold uppercase {{ request()->routeIs('register') ? 'text-blue-500' : '' }}">Register</a>
+                    <a href="{{ route('login') }}" class="ml-6 text-xs font-bold uppercase {{ request()->routeIs('login') ? 'text-blue-500' : '' }}">Log In</a>
                 @endauth
 
                 <a href="#" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
