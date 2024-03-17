@@ -18,13 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(AdminPostController::class)->middleware('admin')->group(function () {
-    Route::get('/admin/posts', 'index')->name('admin.posts.index');
-    Route::get('/admin/posts/create', 'create')->name('admin.posts.create');
-    Route::post('/admin/posts/create', 'store')->name('admin.posts.store');
-    Route::get('/admin/posts/{post}/edit', 'edit')->name('admin.posts.edit');
-    Route::patch('/admin/posts/{post}', 'update')->name('admin.posts.update');
-    Route::delete('/admin/posts/{post}','destroy')->name('admin.posts.destroy');
+Route::middleware('admin')->name('admin.')->group(function () {
+    Route::resource('admin/posts', AdminPostController::class)->except('show');
 });
 
 Route::controller(PostController::class)->group(function () {
