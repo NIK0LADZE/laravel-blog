@@ -7,6 +7,6 @@
 
     <textarea
       {{ $attributes->merge(['class' => 'border border-gray-200 p-2 w-full rounded']) }}
-    >{{ $slot ?? old($attributes['name']) }}</textarea>
+    >{{ old('excerpt', $slot) }}</textarea>
     <x-form.error :name="$attributes['name']" />
 </x-form.field>

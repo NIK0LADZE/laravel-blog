@@ -9,15 +9,15 @@
 
             <div class="flex mt-6">
                 <div class="flex-1">
-                    <x-form.input label="Thumbnail" id="thumbnail" name="thumbnail" type="file" :value="old('thumbnail', $post->thumbnail)" />
+                    <x-form.input label="Thumbnail" id="thumbnail" name="thumbnail" type="file" :value="old('thumbnail', $post->thumbnail)" accept="image/jpeg,image/png,image/jpg" />
                 </div>
 
-                @if ($post->getFirstMediaUrl())
-                    <img src="{{ $post->getFirstMediaUrl() }}" alt="" class="rounded-xl ml-6" width="100">
+                @if ($post->hasMedia('post_images'))
+                    <img src="{{ $post->getFirstMediaUrl('post_images') }}" alt="" class="rounded-xl ml-6" width="100">
                 @endif
             </div>
 
-            <x-form.input label="Publish date" id="published_at" name="published_at" type="date" :value="old('published_at', $post->published_at)?->format('Y-m-d')" required />
+            <x-form.input label="Publish date" id="published_at" name="published_at" type="date" :value="old('published_at', $post->published_at->format('Y-m-d'))" required />
             <x-form.textarea label="Excerpt" id="excerpt" name="excerpt" required>{{ old('excerpt', $post->excerpt) }}</x-form.textarea>
             <x-form.textarea label="Body" id="body" name="body" required>{{ old('body', $post->body) }}</x-form.textarea>
 
@@ -25,7 +25,7 @@
                 <x-form.label label="Category" for="category_id" />
 
                 <select name="category_id" id="category_id" required>
-                    @foreach (\App\Models\Category::all() as $category)
+                    @foreach ($categories as $category)
                         <option
                             value="{{ $category->id }}"
                             {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}

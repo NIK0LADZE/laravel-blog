@@ -5,7 +5,7 @@
 
             <x-form.input label="Title" id="title" name="title" type="text" required />
             <x-form.input label="Slug" id="slug" name="slug" type="text" required />
-            <x-form.input label="Thumbnail" id="thumbnail" name="thumbnail" type="file" required />
+            <x-form.input label="Thumbnail" id="thumbnail" name="thumbnail" type="file" accept="image/jpeg,image/png,image/jpg" required />
             <x-form.input label="Publish date" id="published_at" name="published_at" type="date" required />
             <x-form.textarea label="Excerpt" id="excerpt" name="excerpt" required />
             <x-form.textarea label="Body" id="body" name="body" required />
@@ -14,7 +14,7 @@
                 <x-form.label label="Category" for="category_id" />
 
                 <select name="category_id" id="category_id" required>
-                    @foreach (\App\Models\Category::all() as $category)
+                    @foreach ($categories as $category)
                         <option
                             value="{{ $category->id }}"
                             {{ old('category_id') == $category->id ? 'selected' : '' }}

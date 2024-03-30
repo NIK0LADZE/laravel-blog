@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class SessionsController extends Controller
@@ -11,9 +12,9 @@ class SessionsController extends Controller
         return view('sessions.create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $attributes = request()->validate([
+        $attributes = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);

@@ -3,7 +3,7 @@
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <form class="flex gap-2 mb-6" action="" method="GET">
+                    <form class="flex gap-2 mb-6" action="{{ request()->url() }}" method="GET">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Find posts..." class="border border-gray-200 p-2 w-full rounded">
                         <x-form.button type="primary" class="rounded-md">Search</x-form.button>
                     </form>

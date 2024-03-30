@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -36,7 +35,18 @@ class Post extends Model implements HasMedia
         'published_at',
     ];
 
-    protected $with = ['category', 'author', 'comments'];
+    protected $with = ['category', 'author'];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function ($post) {
+            if (!$post->user_id && auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
+    }
 
     public function scopeSearch($query, $searchString, $titleOnly = false)
     {
@@ -53,6 +63,16 @@ class Post extends Model implements HasMedia
                                 ->orWhere("body", "like", "%$searchString%"))
                 )
         );
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $mimes = [
+            'jpg' => 'image/jpg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+        ];
+        $this->addMediaCollection('post_images')->acceptsMimeTypes($mimes)->singleFile();
     }
 
     public function category()

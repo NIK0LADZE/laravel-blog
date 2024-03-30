@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('admin')->name('admin.')->group(function () {
-    Route::resource('admin/posts', AdminPostController::class)->except('show');
+Route::middleware('admin')->name('admin.')->prefix('admin')->group(function () {
+    Route::resource('posts', AdminPostController::class)->except('show');
 });
 
 Route::controller(PostController::class)->group(function () {
@@ -40,7 +40,7 @@ Route::controller(SessionsController::class)->group(function () {
     Route::post('/logout','destroy')->middleware('auth')->name('logout');
 });
 
-Route::controller(CommentController::class)->middleware('auth')->group(function () {
-    Route::post('/posts/{post:slug}/comments','store')->name('comments.store');
-    Route::delete('/posts/{post:slug}/comments','destroy')->name('comments.destroy');
+Route::controller(CommentController::class)->middleware('auth')->name('comments.')->group(function () {
+    Route::post('/posts/{post:slug}/comments','store')->name('store');
+    Route::delete('/posts/{post:slug}/comments','destroy')->name('destroy');
 });
